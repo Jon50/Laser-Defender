@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class CanvasManager : MonoBehaviour
@@ -16,7 +14,7 @@ public class CanvasManager : MonoBehaviour
         TextScore = _textScore;
         PlayerHealth = _playerHealth;
 
-        if(TextScore != null)
+        if (TextScore != null)
             TextScore.text = SetValue.Score.ToString();
 
         if (PlayerHealth != null)

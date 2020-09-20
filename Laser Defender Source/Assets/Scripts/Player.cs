@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,7 +8,6 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _deathClip;
     [SerializeField] [Range(0, 1)] private float _deathVolume = 1f;
     [SerializeField] private float _playerSpeed = 10f;
-    [SerializeField] private float _padding = 1f;
     [SerializeField] private float _gameOverDelay = 2f;
     [SerializeField] private int _health = 300;
 
@@ -21,33 +18,32 @@ public class Player : MonoBehaviour
     [SerializeField] private float _projectileSpeed = 20f;
     [SerializeField] private float _projectileFiringPeriod = 0.1f;
 
-    [Header("SceneManager")]
+    [Header("References")]
     [SerializeField] private SceneLoad _sceneLoad;
+    [SerializeField] private GameAreaSetup _gameArea;
+
 
     private Coroutine _fireCoroutine;
-    private float _xMin;
-    private float _xMax;
-    private float _yMin;
-    private float _yMax;
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        SetupMoveBoudries();
-
         SetValue.PlayerHealth = _health;
         SetValue.Score = 0;
 
         CanvasManager.UpdateHealthUI();
         CanvasManager.UpdateScoreUI();
+
+        _gameArea = FindObjectOfType<GameAreaSetup>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         Move();
         Fire();
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -58,6 +54,7 @@ public class Player : MonoBehaviour
 
         ProcessHit(damageDealer);
     }
+
 
     private void ProcessHit(DamageDealer damageDealer)
     {
@@ -74,19 +71,12 @@ public class Player : MonoBehaviour
         }
     }
 
+
     private void GameOverDelay()
     {
         _sceneLoad.LoadGameOver();
     }
 
-    private void SetupMoveBoudries()
-    {
-        Camera gameCamera = Camera.main;
-        _xMin = gameCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).x + _padding;
-        _xMax = gameCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - _padding;
-        _yMin = gameCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y + _padding;
-        _yMax = gameCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y - _padding;
-    }
 
     private void Fire()
     {
@@ -100,6 +90,7 @@ public class Player : MonoBehaviour
         }
     }
 
+
     private IEnumerator FireContinuously()
     {
         while (true)
@@ -111,13 +102,14 @@ public class Player : MonoBehaviour
         }
     }
 
+
     private void Move()
     {
         var deltaX = Input.GetAxis("Horizontal") * _playerSpeed * Time.deltaTime;
         var deltaY = Input.GetAxis("Vertical") * _playerSpeed * Time.deltaTime;
 
-        var newXtPos = Mathf.Clamp(transform.position.x + deltaX, _xMin, _xMax);
-        var newYtPos = Mathf.Clamp(transform.position.y + deltaY, _yMin, _yMax);
+        var newXtPos = Mathf.Clamp(transform.position.x + deltaX, _gameArea.XMin, _gameArea.XMax);
+        var newYtPos = Mathf.Clamp(transform.position.y + deltaY, _gameArea.YMin, _gameArea.YMax);
 
         transform.position = new Vector2(newXtPos, newYtPos);
     }
