@@ -99,7 +99,6 @@ MonoBehaviour:
   _deathClip: {fileID: 8300000, guid: c578e928e0fa3d64abe9ee337003cf8a, type: 3}
   _deathVolume: 0.5
   _playerSpeed: 10
-  _padding: 1
   _gameOverDelay: 2
   _health: 300
   _shootClip: {fileID: 8300000, guid: 73dca4571c3018e4597bd2c3d4a47c15, type: 3}
@@ -109,6 +108,7 @@ MonoBehaviour:
   _projectileSpeed: 20
   _projectileFiringPeriod: 0.1
   _sceneLoad: {fileID: 11400000, guid: faafbb0bef3a2334c97e940d9413122d, type: 2}
+  _gameArea: {fileID: 0}
 --- !u!58 &7358038336705160061
 CircleCollider2D:
   m_ObjectHideFlags: 0
